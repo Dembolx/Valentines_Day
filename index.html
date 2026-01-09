@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Będziesz moją walentynką?</title>
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
         padding: 20px;
@@ -12,73 +16,285 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        background: linear-gradient(135deg, #ff6b9d 0%, #ffa8a8 100%);
-        font-family: Arial, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #7c3aed 0%,
+          #5b21b6 50%,
+          #1f0f3d 100%
+        );
+        font-family: "Arial", sans-serif;
+        position: relative;
+        overflow-x: hidden;
       }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 50%,
+            rgba(124, 58, 237, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(91, 33, 182, 0.1) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: -1;
+      }
+
       .container {
         text-align: center;
-        background: white;
-        padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.95);
+        padding: 50px 40px;
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+          0 0 40px rgba(124, 58, 237, 0.2);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(124, 58, 237, 0.1);
+        animation: slideIn 0.8s ease-out;
+        max-width: 600px;
+        position: relative;
       }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .container::before {
+        content: "💜";
+        position: absolute;
+        font-size: 100px;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(-20px);
+        }
+      }
+
       h1 {
-        color: #ff6b9d;
-        font-size: 32px;
-        margin-bottom: 20px;
+        color: #7c3aed;
+        font-size: 36px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
+
+      .subtitle {
+        color: #5b21b6;
+        font-size: 16px;
+        margin-bottom: 30px;
+        font-style: italic;
+        opacity: 0.8;
+      }
+
       .gifs {
-        margin: 20px 0;
+        margin: 30px 0;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
       }
+
       img {
-        width: 200px;
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
         margin: 10px;
-        border-radius: 10px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(124, 58, 237, 0.2);
+        transition: all 0.3s ease;
+        border: 3px solid #7c3aed;
       }
+
+      img:hover {
+        transform: scale(1.08) rotate(2deg);
+        box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+      }
+
       .buttons {
-        margin-top: 30px;
+        margin-top: 40px;
         display: flex;
         gap: 20px;
         justify-content: center;
         flex-wrap: wrap;
       }
+
       button {
         padding: 15px 40px;
         font-size: 18px;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         cursor: pointer;
-        transition: all 0.3s;
-      }
-      #yesBtn {
-        background: #28a745;
-        color: white;
-      }
-      #yesBtn:hover {
-        background: #20c997;
-        transform: scale(1.1);
-      }
-      #noBtn {
-        background: #dc3545;
-        color: white;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         position: relative;
+        overflow: hidden;
       }
+
+      button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: left 0.3s ease;
+      }
+
+      button:hover::before {
+        left: 100%;
+      }
+
+      #yesBtn {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+      }
+
+      #yesBtn:hover {
+        background: linear-gradient(135deg, #20c997 0%, #1aa179 100%);
+        transform: scale(1.15);
+        box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+      }
+
+      #noBtn {
+        background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+        color: white;
+      }
+
       #noBtn:hover {
-        left: -50px;
-        top: 50px;
+        background: linear-gradient(135deg, #c82333 0%, #c0392b 100%);
+        transform: scale(1.1);
+        box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+      }
+
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #7c3aed;
+        pointer-events: none;
       }
       .confetti {
         position: fixed;
         width: 10px;
         height: 10px;
-        background: #ff6b9d;
+        background: #7c3aed;
         pointer-events: none;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+      .modal-content {
+        background: linear-gradient(135deg, #2d1b4e 0%, #000000 100%);
+        margin: 10% auto;
+        padding: 40px;
+        border: 3px solid #7c3aed;
+        border-radius: 15px;
+        width: 80%;
+        max-width: 500px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 0 30px rgba(124, 58, 237, 0.5);
+      }
+      .modal-content h2 {
+        color: #a78bfa;
+        margin-top: 0;
+        font-size: 24px;
+      }
+      .modal-content p {
+        color: #d8b4fe;
+        font-size: 16px;
+        margin: 15px 0;
+      }
+      .modal-content input {
+        padding: 12px;
+        width: 100%;
+        max-width: 300px;
+        font-size: 16px;
+        border: 2px solid #7c3aed;
+        border-radius: 8px;
+        background: #1f1035;
+        color: #d8b4fe;
+        margin: 15px 0;
+        box-sizing: border-box;
+      }
+      .modal-content input::placeholder {
+        color: #7c3aed;
+      }
+      .modal-content input:focus {
+        outline: none;
+        background: #2d1b4e;
+        border-color: #a78bfa;
+      }
+      .modal-content button {
+        background: #7c3aed;
+        color: white;
+        padding: 12px 30px;
+        margin: 10px 5px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+      .modal-content button:hover {
+        background: #a78bfa;
+        transform: scale(1.05);
+      }
+      .hint {
+        color: #d8b4fe;
+        font-size: 14px;
+        margin-top: 15px;
+      }
+      .success {
+        color: #4ade80;
+        font-size: 18px;
+        margin: 10px 0;
+      }
+      .error {
+        color: #f87171;
+        font-size: 16px;
+        margin: 10px 0;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>💝 Czy zostaniesz moją walentynką? 💝</h1>
+      <p class="subtitle">
+        Tylko jedna szansa na tak... lub gra w zgadywanie 🎮
+      </p>
       <div class="gifs">
         <img
           src="https://media.giphy.com/media/g9GznKK0ZX94Q/giphy.gif"
@@ -95,7 +311,73 @@
       </div>
     </div>
 
+    <div id="gameModal" class="modal">
+      <div class="modal-content">
+        <h2>🎮 Gra w zgadywanie 🎮</h2>
+        <p>Wylosowałem liczbę z zakresu <strong>1 - 1 000 000</strong></p>
+        <p>Potrafisz ją zgadnąć?</p>
+        <input
+          type="number"
+          id="guessInput"
+          placeholder="Wpisz liczbę..."
+          min="1"
+          max="1000000"
+        />
+        <br />
+        <button onclick="checkGuess()">Sprawdź</button>
+        <div id="feedback"></div>
+        <div class="hint" id="hint"></div>
+      </div>
+    </div>
+
     <script>
+      let secretNumber = 0;
+      let attempts = 0;
+
+      function startGame() {
+        secretNumber = Math.floor(Math.random() * 1000000) + 1;
+        attempts = 0;
+        document.getElementById("gameModal").style.display = "block";
+        document.getElementById("guessInput").value = "";
+        document.getElementById("feedback").innerHTML = "";
+        document.getElementById("hint").innerHTML = "";
+        document.getElementById("guessInput").focus();
+      }
+
+      function checkGuess() {
+        const guess = parseInt(document.getElementById("guessInput").value);
+        const feedbackDiv = document.getElementById("feedback");
+        const hintDiv = document.getElementById("hint");
+
+        if (isNaN(guess) || guess < 1 || guess > 1000000) {
+          feedbackDiv.innerHTML =
+            '<div class="error">❌ Wpisz liczbę z zakresu 1 - 1 000 000!</div>';
+          return;
+        }
+
+        if (guess === secretNumber) {
+          feedbackDiv.innerHTML = `<div class="success">🎉 Brawo! Zgadłeś! Liczba to: ${secretNumber}</div>`;
+          hintDiv.innerHTML = `<button onclick="closeGame()" style="background: #7c3aed; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px;">Powrót do pytania</button>`;
+          return;
+        } else {
+          feedbackDiv.innerHTML = `<div class="error">❌ Nie zgadłeś! Właściwa liczba to: ${secretNumber}</div>`;
+          hintDiv.innerHTML = `<button onclick="closeGame()" style="background: #7c3aed; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px;">Powrót do pytania</button>`;
+          return;
+        }
+      }
+
+      function closeGame() {
+        document.getElementById("gameModal").style.display = "none";
+      }
+
+      document
+        .getElementById("guessInput")
+        .addEventListener("keypress", (event) => {
+          if (event.key === "Enter") {
+            checkGuess();
+          }
+        });
+
       function createConfetti() {
         for (let i = 0; i < 50; i++) {
           const confetti = document.createElement("div");
@@ -103,10 +385,10 @@
           confetti.style.left = Math.random() * 100 + "vw";
           confetti.style.top = "-10px";
           confetti.style.background = [
-            "#ff6b9d",
-            "#ffa8a8",
-            "#ffb3ba",
-            "#ffc2c7",
+            "#7c3aed",
+            "#a78bfa",
+            "#5b21b6",
+            "#2d1b4e",
           ][Math.floor(Math.random() * 4)];
           document.body.appendChild(confetti);
 
@@ -127,12 +409,8 @@
         alert("Jesteś fantastyczna! 💕");
       });
 
-      document.getElementById("noBtn").addEventListener("mouseover", () => {
-        const x = Math.random() * (window.innerWidth - 100);
-        const y = Math.random() * (window.innerHeight - 100);
-        document.getElementById("noBtn").style.position = "fixed";
-        document.getElementById("noBtn").style.left = x + "px";
-        document.getElementById("noBtn").style.top = y + "px";
+      document.getElementById("noBtn").addEventListener("click", () => {
+        startGame();
       });
     </script>
   </body>
