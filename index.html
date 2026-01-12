@@ -1336,17 +1336,6 @@
         startGame();
       });
 
-      // Initialize the page
-      window.addEventListener("load", () => {
-        // Utwórz pływające serca
-        createFloatingHearts();
-
-        // Dodaj trochę konfetti na start
-        setTimeout(() => {
-          createOptimizedConfetti(30);
-        }, 1000);
-      });
-
       // Funkcja do tworzenia pływających serc (jeśli potrzebna)
       function createFloatingHearts() {
         const container = document.getElementById("heartsContainer");
