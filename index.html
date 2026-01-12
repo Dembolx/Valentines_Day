@@ -1002,9 +1002,7 @@
 
     <!-- Celebration elements -->
     <div class="celebration" id="celebration"></div>
-    <div class="love-message" id="loveMessage">
-      Jesteś cudowna! 💖 Dziękuję, że jesteś moją walentynką! 🥰
-    </div>
+    <div class="love-message" id="loveMessage">YEY🥰</div>
 
     <script>
       // ========== POPRAWIONE KONFETTI - BARDZIEJ ROZRZUCONE ==========
@@ -1291,17 +1289,47 @@
       }
 
       // Event listeners
+      // Event listeners
       document.getElementById("yesBtn").addEventListener("click", () => {
-        // Rozrzucone konfetti dla TAK
-        createOptimizedConfetti(200);
+        // MEGA KONFETTI - Pierwsza fala natychmiast
+        createOptimizedConfetti(250);
+
+        // Druga fala po 200ms
+        setTimeout(() => {
+          createOptimizedConfetti(200);
+        }, 200);
+
+        // Trzecia fala po 500ms
+        setTimeout(() => {
+          createOptimizedConfetti(180);
+        }, 500);
+
+        // Czwarta fala po 900ms
+        setTimeout(() => {
+          createOptimizedConfetti(150);
+        }, 900);
+
+        // Piąta fala po 1400ms dla długotrwałej celebracji
+        setTimeout(() => {
+          createOptimizedConfetti(120);
+        }, 1400);
+
         showLoveMessage();
 
-        // Prosta animacja serca
+        // Prosta animacja serca z pulsowaniem
         const container = document.querySelector(".container");
         container.style.transform = "scale(1.05)";
         setTimeout(() => {
           container.style.transform = "scale(1)";
         }, 300);
+
+        // Dodatkowa animacja pulsowania serca na górze
+        const topHeart = document.querySelector(".floating-top-heart");
+        topHeart.style.animation = "none";
+        setTimeout(() => {
+          topHeart.style.animation =
+            "float 3s ease-in-out infinite, heartPulse 0.5s ease-in-out 3";
+        }, 10);
       });
 
       document.getElementById("noBtn").addEventListener("click", () => {
