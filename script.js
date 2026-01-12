@@ -1,7 +1,7 @@
 // Initialize variables
       let secretNumber = 0;
-      let attempts = 3;
-      let maxAttempts = 3;
+      let attempts = 1;
+      let maxAttempts = 1;
       let gameActive = false;
 
       // Create floating hearts in background

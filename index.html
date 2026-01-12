@@ -2,15 +2,910 @@
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Będziesz moją walentynką?</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <link rel="stylesheet" href="style.css" />
+    <style>
+      :root {
+        --p1: #faa6ff;
+        --p2: #7353ba;
+        --p3: #2f195f;
+        --p4: #0f1020;
+        --p5: #efc3f5;
+        --black: #000000;
+        --white: #ffffff;
+        --success: #4ade80;
+        --error: #f87171;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        font-size: 16px;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        position: relative;
+        overflow-x: hidden;
+        background: linear-gradient(
+          135deg,
+          var(--p1) 0%,
+          var(--p2) 40%,
+          var(--p3) 70%,
+          var(--p4) 100%
+        );
+        animation: gradientShift 12s ease-in-out infinite;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        will-change: transform;
+        overscroll-behavior: none;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background: linear-gradient(
+            135deg,
+            var(--p1),
+            var(--p2),
+            var(--p3),
+            var(--p4)
+          );
+        }
+        50% {
+          background: linear-gradient(
+            135deg,
+            var(--p5),
+            var(--p2),
+            var(--p3),
+            var(--p4)
+          );
+        }
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 10% 20%,
+            #faa6ff33 0%,
+            transparent 25%
+          ),
+          radial-gradient(circle at 90% 30%, #7353ba33 0%, transparent 25%),
+          radial-gradient(circle at 50% 80%, #2f195f33 0%, transparent 25%),
+          radial-gradient(circle at 20% 70%, #efc3f533 0%, transparent 25%);
+        pointer-events: none;
+        z-index: -1;
+        will-change: transform;
+      }
+
+      /* Floating hearts - ograniczone dla telefonów */
+      .floating-heart {
+        position: fixed;
+        font-size: 1.5rem;
+        color: var(--p1);
+        opacity: 0;
+        pointer-events: none;
+        z-index: -1;
+        animation: floatHeart 20s linear infinite;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      @keyframes floatHeart {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.8;
+        }
+        90% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Main container - FIXED POSITION dla telefonów */
+      .container {
+        text-align: center;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.96),
+          rgba(239, 195, 245, 0.6)
+        );
+        padding: 5.5rem 2rem 3rem;
+        border-radius: 1.875rem;
+        box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.35), 0 0 2.5rem #7353ba22,
+          inset 0 0.0625rem 0 rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(8px);
+        border: 0.125rem solid rgba(255, 255, 255, 0.3);
+        animation: slideIn 0.8s ease-out;
+        max-width: 43.75rem;
+        width: 100%;
+        position: relative;
+        overflow: visible;
+        margin: 3.5rem 1rem 1rem;
+        z-index: 10;
+        will-change: transform;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(1.875rem) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* Floating top heart */
+      .floating-top-heart {
+        position: absolute;
+        font-size: 5.625rem;
+        top: -4.375rem;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: float 3s ease-in-out infinite;
+        color: var(--p1);
+        filter: drop-shadow(0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.3));
+        z-index: 20;
+        text-shadow: 0 0 1.25rem rgba(250, 166, 255, 0.7);
+        line-height: 1;
+        user-select: none;
+        will-change: transform;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0) rotate(0deg);
+        }
+        33% {
+          transform: translateX(-50%) translateY(-1.125rem) rotate(5deg);
+        }
+        66% {
+          transform: translateX(-50%) translateY(-0.625rem) rotate(-5deg);
+        }
+      }
+
+      .content {
+        position: relative;
+        z-index: 2;
+      }
+
+      h1 {
+        color: var(--p2);
+        font-size: clamp(1.75rem, 5vw, 2.375rem);
+        margin-bottom: 0.625rem;
+        font-weight: 800;
+        text-shadow: 0 0.1875rem 0.5rem rgba(0, 0, 0, 0.12);
+        position: relative;
+        display: inline-block;
+        line-height: 1.3;
+        padding: 0 0.5rem;
+      }
+
+      h1::after {
+        content: "";
+        position: absolute;
+        bottom: -0.3125rem;
+        left: 10%;
+        width: 80%;
+        height: 0.1875rem;
+        background: linear-gradient(90deg, transparent, var(--p1), transparent);
+      }
+
+      .subtitle {
+        color: var(--p3);
+        font-size: clamp(1rem, 3vw, 1.125rem);
+        margin-bottom: 1.875rem;
+        font-style: italic;
+        opacity: 0.9;
+        animation: fadeIn 1s ease-out 0.5s both;
+        line-height: 1.4;
+        padding: 0 0.5rem;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(0.625rem);
+        }
+        to {
+          opacity: 0.9;
+          transform: translateY(0);
+        }
+      }
+
+      .gifs-container {
+        margin: 1.875rem 0;
+        display: flex;
+        justify-content: center;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        padding: 0 0.5rem;
+      }
+
+      .gif-item {
+        width: min(13.75rem, 45vw);
+        height: min(13.75rem, 45vw);
+        min-width: 8.125rem;
+        min-height: 8.125rem;
+        border-radius: 1.125rem;
+        overflow: hidden;
+        box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.25);
+        position: relative;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 0.25rem solid transparent;
+        background: linear-gradient(45deg, var(--p2), var(--p1)) border-box;
+        animation: gifItemEntrance 0.8s ease-out;
+        animation-fill-mode: both;
+        will-change: transform;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+      }
+
+      .gif-item:nth-child(1) {
+        animation-delay: 0.2s;
+      }
+      .gif-item:nth-child(2) {
+        animation-delay: 0.4s;
+      }
+      .gif-item:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+
+      @keyframes gifItemEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(1.875rem) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .gif-item:hover {
+        transform: translateY(-0.625rem) scale(1.05);
+        box-shadow: 0 0.9375rem 2.5rem rgba(115, 83, 186, 0.4);
+        border-color: var(--p1);
+      }
+
+      .gif-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+      }
+
+      .gif-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        color: white;
+        padding: 0.625rem;
+        font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+
+      .gif-item:hover .gif-caption {
+        opacity: 1;
+      }
+
+      .buttons {
+        margin-top: 2.5rem;
+        display: flex;
+        gap: 1.25rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 0 0.5rem;
+        position: relative;
+        z-index: 5;
+      }
+
+      .valentine-btn {
+        padding: clamp(0.875rem, 3vw, 1rem) clamp(1.5rem, 5vw, 2.5rem);
+        font-size: clamp(1rem, 3.5vw, 1.25rem);
+        border: none;
+        border-radius: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 700;
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        min-width: min(10rem, 40vw);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        z-index: 1;
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-touch-callout: none;
+        will-change: transform;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .valentine-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s ease;
+        z-index: -1;
+      }
+
+      .valentine-btn:active::before {
+        left: 100%;
+      }
+
+      .valentine-btn:active {
+        transform: scale(0.98) translateY(2px);
+        box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.2);
+      }
+
+      #yesBtn {
+        background: linear-gradient(135deg, var(--p1) 0%, var(--p2) 100%);
+        color: var(--white);
+      }
+
+      #yesBtn:active {
+        animation: none;
+        transform: scale(0.98) translateY(2px);
+      }
+
+      #noBtn {
+        background: linear-gradient(135deg, var(--p3) 0%, var(--p4) 100%);
+        color: var(--white);
+      }
+
+      #noBtn:active {
+        transform: scale(0.98) translateY(2px);
+      }
+
+      .confetti {
+        position: fixed;
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0;
+        user-select: none;
+        will-change: transform, opacity;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        border-radius: 2px;
+      }
+
+      /* Różne kształty konfetti */
+      .confetti.heart {
+        background: #ff6b9d;
+        font-size: 12px;
+        line-height: 1;
+        text-align: center;
+        color: #ff3366;
+      }
+
+      .confetti.circle {
+        border-radius: 50%;
+      }
+
+      .confetti.star {
+        background: #ffeb3b;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+      }
+
+      .confetti.rectangle {
+        border-radius: 1px;
+      }
+
+      .confetti.triangle {
+        background: transparent;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 10px solid;
+      }
+
+      /* Modal - FIXED dla telefonów */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        padding: 1rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, var(--p3) 0%, var(--black) 100%);
+        margin: auto;
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+        border: 0.125rem solid var(--p2);
+        border-radius: 1.25rem;
+        width: 100%;
+        max-width: 34.375rem;
+        text-align: center;
+        color: var(--white);
+        box-shadow: 0 0 3.125rem #7353ba55;
+        position: relative;
+        overflow: hidden;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        top: 50%;
+        transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        max-height: 90vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .modal-content::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        background: radial-gradient(
+          circle,
+          transparent 30%,
+          rgba(250, 166, 255, 0.05) 70%
+        );
+        animation: rotate 20s linear infinite;
+        z-index: 0;
+      }
+
+      .modal-content > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .modal-content h2 {
+        color: var(--p1);
+        margin-top: 0;
+        font-size: clamp(1.25rem, 4vw, 1.625rem);
+        margin-bottom: 1.25rem;
+        line-height: 1.3;
+      }
+
+      .modal-content p {
+        color: var(--p5);
+        font-size: clamp(1rem, 3vw, 1.125rem);
+        margin: 0.9375rem 0;
+        line-height: 1.5;
+      }
+
+      .modal-content input {
+        padding: clamp(0.75rem, 2vw, 0.875rem);
+        width: 100%;
+        max-width: 20rem;
+        font-size: clamp(1rem, 3vw, 1.125rem);
+        border: 0.125rem solid var(--p2);
+        border-radius: 0.625rem;
+        background: #1b1028;
+        color: var(--p5);
+        margin: 0.9375rem 0;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        -webkit-appearance: none;
+        appearance: none;
+        outline: none;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+      }
+
+      .modal-content input:focus {
+        background: #241231;
+        border-color: var(--p1);
+        box-shadow: 0 0 0.9375rem rgba(250, 166, 255, 0.5);
+      }
+
+      .modal-buttons {
+        display: flex;
+        gap: 0.9375rem;
+        justify-content: center;
+        margin-top: 1.25rem;
+        flex-wrap: wrap;
+      }
+
+      .modal-btn {
+        background: var(--p2);
+        color: var(--white);
+        padding: clamp(0.625rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.75rem);
+        border: none;
+        border-radius: 0.625rem;
+        cursor: pointer;
+        font-size: clamp(0.875rem, 2.5vw, 1rem);
+        font-weight: 600;
+        transition: all 0.2s ease;
+        min-width: min(7.5rem, 30vw);
+        touch-action: manipulation;
+        user-select: none;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .modal-btn:active {
+        background: var(--p1);
+        transform: scale(0.98);
+        box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.2);
+      }
+
+      .hint {
+        color: var(--p5);
+        font-size: clamp(0.875rem, 2.5vw, 1rem);
+        margin-top: 0.9375rem;
+        font-style: italic;
+        line-height: 1.4;
+      }
+
+      .success {
+        color: var(--success);
+        font-size: clamp(1rem, 3vw, 1.25rem);
+        margin: 0.9375rem 0;
+        font-weight: 600;
+        animation: successPulse 1s infinite;
+        line-height: 1.4;
+      }
+
+      @keyframes successPulse {
+        0%,
+        100% {
+          text-shadow: 0 0 0.3125rem var(--success);
+        }
+        50% {
+          text-shadow: 0 0 0.9375rem var(--success);
+        }
+      }
+
+      .error {
+        color: var(--error);
+        font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+        margin: 0.9375rem 0;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+
+      .attempts-counter {
+        color: var(--p5);
+        font-size: clamp(0.875rem, 2.5vw, 1rem);
+        margin-top: 0.625rem;
+      }
+
+      /* Love message - FIXED dla telefonów */
+      .love-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: linear-gradient(135deg, var(--p1), var(--p2));
+        color: white;
+        padding: clamp(1rem, 3vw, 1.875rem) clamp(1.5rem, 4vw, 3.125rem);
+        border-radius: 1.25rem;
+        font-size: clamp(1.25rem, 4vw, 1.75rem);
+        font-weight: 800;
+        text-align: center;
+        box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.4);
+        z-index: 3001;
+        display: none;
+        animation: messageAppear 1s ease-out forwards;
+        max-width: 90%;
+        line-height: 1.4;
+        user-select: none;
+        will-change: transform;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      @keyframes messageAppear {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+        }
+        70% {
+          transform: translate(-50%, -50%) scale(1.1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+      }
+
+      footer {
+        margin-top: 1.875rem;
+        color: var(--p3);
+        font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+        opacity: 0.8;
+        padding: 0 0.5rem;
+      }
+
+      .hearts-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: -1;
+        user-select: none;
+        will-change: transform;
+      }
+
+      /* Animacje CSS dla modal - bez JS transform */
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-50px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* MEDIA QUERIES dla telefonów */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+          overflow-y: auto;
+        }
+
+        .container {
+          padding: 4.5rem 1.25rem 2rem;
+          margin: 3rem auto 1rem;
+          max-height: 90vh;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          position: relative;
+          transform: none !important;
+          -webkit-transform: none !important;
+        }
+
+        .floating-top-heart {
+          font-size: 4.375rem;
+          top: -3.125rem;
+          position: fixed;
+          z-index: 100;
+        }
+
+        .gifs-container {
+          gap: 0.9375rem;
+        }
+
+        .gif-item {
+          width: min(11.25rem, 42vw);
+          height: min(11.25rem, 42vw);
+        }
+
+        .buttons {
+          gap: 0.9375rem;
+          position: sticky;
+          bottom: 0;
+          background: linear-gradient(
+            to top,
+            rgba(255, 255, 255, 0.95),
+            rgba(239, 195, 245, 0.7)
+          );
+          padding: 1rem 0.5rem;
+          margin-top: 2rem;
+          border-radius: 1rem;
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) !important;
+          -webkit-transform: translate(-50%, -50%) !important;
+          margin: 0;
+          animation: modalSlideIn 0.3s ease-out;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 4rem 1rem 1.5rem;
+          margin: 2.5rem auto 1rem;
+          border-radius: 1.25rem;
+        }
+
+        .floating-top-heart {
+          font-size: 3.75rem;
+          top: -2.5rem;
+        }
+
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .subtitle {
+          font-size: 0.9375rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .gifs-container {
+          gap: 0.75rem;
+        }
+
+        .gif-item {
+          width: min(9.375rem, 40vw);
+          height: min(9.375rem, 40vw);
+          min-width: 6.25rem;
+          min-height: 6.25rem;
+        }
+
+        .buttons {
+          gap: 0.75rem;
+          margin-top: 2rem;
+          padding: 0.75rem 0.5rem;
+        }
+
+        .valentine-btn {
+          min-width: 8.75rem;
+          padding: 0.75rem 1.5rem;
+        }
+
+        .modal-content {
+          padding: 1.25rem;
+          width: 95%;
+        }
+
+        .modal-buttons {
+          gap: 0.625rem;
+        }
+
+        .modal-btn {
+          min-width: 6.25rem;
+          padding: 0.5rem 1rem;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .container {
+          padding: 3.5rem 0.75rem 1.25rem;
+        }
+
+        .floating-top-heart {
+          font-size: 3.125rem;
+          top: -2.1875rem;
+        }
+
+        h1 {
+          font-size: 1.375rem;
+        }
+
+        .gif-item {
+          width: 8.125rem;
+          height: 8.125rem;
+        }
+
+        .buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .valentine-btn {
+          width: 100%;
+          max-width: 15rem;
+        }
+      }
+
+      /* Zapobieganie animacjom na niskim FPS */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* Preload krytycznych elementów */
+      .preload {
+        position: absolute;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+      }
+    </style>
   </head>
   <body>
+    <!-- Preload krytycznych assetów -->
+    <div class="preload">
+      <i class="fas fa-heart"></i>
+      <i class="fas fa-gamepad"></i>
+    </div>
+
     <!-- Floating hearts in background -->
     <div class="hearts-container" id="heartsContainer"></div>
 
@@ -31,6 +926,7 @@
               src="assets/Flying Fox Hug GIF.gif"
               alt="Cute animated heart"
               loading="lazy"
+              decoding="async"
             />
             <div class="gif-caption">Miłość jest w powietrzu!</div>
           </div>
@@ -39,6 +935,7 @@
               src="assets/I Love You Kiss GIF.gif"
               alt="Romantic animation"
               loading="lazy"
+              decoding="async"
             />
             <div class="gif-caption">Razem możemy wszystko!</div>
           </div>
@@ -47,6 +944,7 @@
               src="assets/Hungry Nom Nom GIF.gif"
               alt="Love animation"
               loading="lazy"
+              decoding="async"
             />
             <div class="gif-caption">Ty i ja, razem na zawsze!</div>
           </div>
@@ -108,6 +1006,382 @@
       Jesteś cudowna! 💖 Dziękuję, że jesteś moją walentynką! 🥰
     </div>
 
-    <script src="script.js"></script>
+    <script>
+      // ========== POPRAWIONE KONFETTI - BARDZIEJ ROZRZUCONE ==========
+
+      // Initialize variables
+      let secretNumber = 0;
+      let attempts = 3;
+      let maxAttempts = 3;
+      let gameActive = false;
+      let animationFrameId = null;
+      let confettiElements = [];
+
+      // OPTYMALIZOWANE konfetti - BARDZIEJ ROZRZUCONE
+      function createOptimizedConfetti(count = 80) {
+        const colors = [
+          "#faa6ff",
+          "#7353ba",
+          "#2f195f",
+          "#efc3f5",
+          "#ffffff",
+          "#ff6b9d",
+          "#ff3366",
+          "#ffeb3b",
+          "#4ade80",
+          "#00bcd4",
+          "#ff9800",
+          "#9c27b0",
+          "#2196f3",
+          "#ff5722",
+        ];
+
+        // Wyczyść stare confetti
+        cleanupConfetti();
+
+        // Dla telefonów mniej konfetti, ale bardziej rozrzucone
+        const isMobile =
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          );
+        const actualCount = isMobile ? Math.min(count, 40) : count;
+
+        // Użyj DocumentFragment dla lepszej wydajności
+        const fragment = document.createDocumentFragment();
+
+        for (let i = 0; i < actualCount; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+
+          // Różne kształty konfetti
+          const shapeType = Math.floor(Math.random() * 5);
+          switch (shapeType) {
+            case 0:
+              confetti.classList.add("heart");
+              confetti.innerHTML = "❤";
+              break;
+            case 1:
+              confetti.classList.add("circle");
+              break;
+            case 2:
+              confetti.classList.add("star");
+              break;
+            case 3:
+              confetti.classList.add("rectangle");
+              break;
+            case 4:
+              confetti.classList.add("triangle");
+              break;
+          }
+
+          // Losowe pozycje startowe - BARDZIEJ ROZRZUCONE
+          const startX = Math.random() * 120 - 10; // -10% do 110% ekranu
+          const startY = Math.random() * 100 - 20; // -20px do góry
+
+          confetti.style.left = startX + "vw";
+          confetti.style.top = startY + "px";
+
+          // Losowe kolory
+          confetti.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+          if (shapeType === 4) {
+            // triangle
+            confetti.style.borderBottomColor =
+              colors[Math.floor(Math.random() * colors.length)];
+          }
+
+          // Różne rozmiary
+          const size = isMobile
+            ? 3 + Math.random() * 8 // 3-11px na telefonach
+            : 5 + Math.random() * 15; // 5-20px na desktop
+
+          if (shapeType !== 0 && shapeType !== 4) {
+            // nie dla serc i trójkątów
+            confetti.style.width = size + "px";
+            confetti.style.height = size + "px";
+          } else if (shapeType === 4) {
+            // trójkąty
+            const triangleSize = size * 1.5;
+            confetti.style.borderLeftWidth = triangleSize / 2 + "px";
+            confetti.style.borderRightWidth = triangleSize / 2 + "px";
+            confetti.style.borderBottomWidth = triangleSize + "px";
+          }
+
+          // Losowa przezroczystość
+          confetti.style.opacity = 0.6 + Math.random() * 0.4;
+
+          // Losowe parametry animacji dla każdego elementu
+          const confettiData = {
+            element: confetti,
+            x: startX,
+            y: startY,
+            rotation: Math.random() * 360,
+            rotationSpeed: (Math.random() - 0.5) * 10,
+            speedX: (Math.random() - 0.5) * 4, // Poziomy ruch
+            speedY: 2 + Math.random() * 4, // Pionowy ruch (grawitacja)
+            sway: 0.5 + Math.random() * 2, // Wahanie boku
+            swaySpeed: 0.5 + Math.random() * 2,
+            startTime: Date.now(),
+            duration: 2000 + Math.random() * 3000,
+          };
+
+          fragment.appendChild(confetti);
+          confettiElements.push(confettiData);
+        }
+
+        document.body.appendChild(fragment);
+
+        // Uruchom animację
+        animateConfetti();
+      }
+
+      // Animacja konfetti z fizyką
+      function animateConfetti() {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+
+        const currentTime = Date.now();
+        let allFinished = true;
+
+        // Animate all confetti elements
+        confettiElements.forEach((confetti, index) => {
+          if (!confetti.element.parentNode) {
+            return;
+          }
+
+          const elapsed = currentTime - confetti.startTime;
+          const progress = Math.min(elapsed / confetti.duration, 1);
+
+          if (progress < 1) {
+            allFinished = false;
+
+            // Fizyka spadania z rotacją
+            const timeFactor = (progress * confetti.duration) / 1000;
+
+            // Pozycja z grawitacją i wahaniami
+            const newX =
+              confetti.x +
+              confetti.speedX * timeFactor * 50 +
+              Math.sin(timeFactor * confetti.swaySpeed) * confetti.sway * 10;
+
+            const newY =
+              confetti.y +
+              confetti.speedY * timeFactor * 50 +
+              timeFactor * timeFactor * 4.9; // efekt grawitacji
+
+            // Rotacja
+            const newRotation =
+              confetti.rotation + confetti.rotationSpeed * timeFactor * 50;
+
+            // Zastosuj transformacje
+            confetti.element.style.transform = `translate(${newX}vw, ${newY}px) rotate(${newRotation}deg)`;
+
+            // Fade out pod koniec
+            if (progress > 0.7) {
+              confetti.element.style.opacity =
+                confetti.element.style.opacity * (1 - (progress - 0.7) / 0.3);
+            }
+          } else {
+            // Animacja zakończona - usuń element
+            if (confetti.element.parentNode) {
+              confetti.element.parentNode.removeChild(confetti.element);
+            }
+          }
+        });
+
+        // Usuń zakończone elementy z tablicy
+        confettiElements = confettiElements.filter((confetti) => {
+          const elapsed = currentTime - confetti.startTime;
+          const progress = elapsed / confetti.duration;
+          return progress < 1 && confetti.element.parentNode;
+        });
+
+        // Kontynuuj animację jeśli są jeszcze elementy
+        if (confettiElements.length > 0) {
+          animationFrameId = requestAnimationFrame(animateConfetti);
+        } else {
+          animationFrameId = null;
+        }
+      }
+
+      // Wyczyść konfetti
+      function cleanupConfetti() {
+        confettiElements.forEach((confetti) => {
+          if (confetti.element && confetti.element.parentNode) {
+            confetti.element.parentNode.removeChild(confetti.element);
+          }
+        });
+        confettiElements = [];
+
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+      }
+
+      // Show love message when user accepts
+      function showLoveMessage() {
+        const message = document.getElementById("loveMessage");
+        message.style.display = "block";
+
+        // Utwórz rozrzucone konfetti
+        createOptimizedConfetti(120);
+
+        // Opóźnione ukrycie
+        setTimeout(() => {
+          message.style.display = "none";
+        }, 4000);
+      }
+
+      // Check user's guess - dodaj konfetti dla poprawnej odpowiedzi
+      function checkGuess() {
+        if (!gameActive) return;
+
+        const guessInput = document.getElementById("guessInput");
+        const guess = parseInt(guessInput.value);
+        const feedbackDiv = document.getElementById("feedback");
+        const attemptsCounter = document.getElementById("attemptsCounter");
+
+        if (isNaN(guess) || guess < 1 || guess > 1000000) {
+          feedbackDiv.innerHTML =
+            '<div class="error"><i class="fas fa-exclamation-triangle"></i> Wpisz liczbę z zakresu 1 - 1 000 000!</div>';
+          shakeElement(guessInput);
+          return;
+        }
+
+        attempts--;
+        attemptsCounter.innerHTML = `Pozostałe próby: ${attempts}`;
+
+        if (guess === secretNumber) {
+          // Correct guess
+          feedbackDiv.innerHTML = `<div class="success"><i class="fas fa-trophy"></i> BRAWO! Zgadłeś za ${
+            maxAttempts - attempts
+          } razem! Tajemnicza liczba to: ${secretNumber}</div>`;
+          gameActive = false;
+
+          // Konfetti dla wygranej
+          createOptimizedConfetti(150);
+
+          // Show celebration
+          setTimeout(() => {
+            closeGame();
+            showLoveMessage();
+          }, 2000);
+        } else if (attempts <= 0) {
+          // No more attempts
+          feedbackDiv.innerHTML = `<div class="error"><i class="fas fa-times-circle"></i> Niestety, wykorzystałeś wszystkie próby. Tajemnicza liczba to: ${secretNumber}</div>`;
+          gameActive = false;
+
+          setTimeout(() => {
+            closeGame();
+          }, 3000);
+        } else {
+          // Wrong guess, give hint
+          const hint = guess < secretNumber ? "za mała" : "za duża";
+          feedbackDiv.innerHTML = `<div class="error"><i class="fas fa-times"></i> Nie zgadłeś! Twoja liczba jest ${hint}. Próbuj dalej!</div>`;
+          shakeElement(feedbackDiv);
+        }
+
+        // Clear input
+        guessInput.value = "";
+        setTimeout(() => {
+          guessInput.focus();
+        }, 50);
+      }
+
+      // Event listeners
+      document.getElementById("yesBtn").addEventListener("click", () => {
+        // Rozrzucone konfetti dla TAK
+        createOptimizedConfetti(200);
+        showLoveMessage();
+
+        // Prosta animacja serca
+        const container = document.querySelector(".container");
+        container.style.transform = "scale(1.05)";
+        setTimeout(() => {
+          container.style.transform = "scale(1)";
+        }, 300);
+      });
+
+      document.getElementById("noBtn").addEventListener("click", () => {
+        startGame();
+      });
+
+      // Initialize the page
+      window.addEventListener("load", () => {
+        // Utwórz pływające serca
+        createFloatingHearts();
+
+        // Dodaj trochę konfetti na start
+        setTimeout(() => {
+          createOptimizedConfetti(30);
+        }, 1000);
+      });
+
+      // Funkcja do tworzenia pływających serc (jeśli potrzebna)
+      function createFloatingHearts() {
+        const container = document.getElementById("heartsContainer");
+        const heartCount = 8;
+
+        for (let i = 0; i < heartCount; i++) {
+          const heart = document.createElement("div");
+          heart.className = "floating-heart";
+          heart.innerHTML = "❤️";
+          heart.style.left = Math.random() * 100 + "vw";
+          heart.style.fontSize = 15 + Math.random() * 20 + "px";
+          heart.style.animationDelay = Math.random() * 10 + "s";
+          heart.style.animationDuration = 10 + Math.random() * 15 + "s";
+          container.appendChild(heart);
+        }
+      }
+
+      // Shake animation (jeśli potrzebna)
+      function shakeElement(element) {
+        element.style.animation = "none";
+        setTimeout(() => {
+          element.style.animation = "shake 0.5s ease";
+        }, 10);
+      }
+
+      // Pozostałe funkcje (startGame, giveHint, closeGame) pozostają bez zmian
+      function startGame() {
+        secretNumber = Math.floor(Math.random() * 1000000) + 1;
+        attempts = maxAttempts;
+        gameActive = true;
+
+        document.getElementById("gameModal").style.display = "block";
+        document.getElementById("guessInput").value = "";
+        document.getElementById("feedback").innerHTML = "";
+        document.getElementById("hint").innerHTML = "";
+        document.getElementById(
+          "attemptsCounter"
+        ).innerHTML = `Pozostałe próby: ${attempts}`;
+        document.getElementById("guessInput").focus();
+      }
+
+      function giveHint() {
+        if (!gameActive) return;
+
+        const hintDiv = document.getElementById("hint");
+        const range = 100000;
+        const lowerBound = Math.max(1, secretNumber - range);
+        const upperBound = Math.min(1000000, secretNumber + range);
+
+        hintDiv.innerHTML = `<i class="fas fa-lightbulb"></i> Podpowiedź: Szukana liczba jest między ${lowerBound.toLocaleString()} a ${upperBound.toLocaleString()}`;
+
+        if (attempts > 1) {
+          attempts--;
+          document.getElementById(
+            "attemptsCounter"
+          ).innerHTML = `Pozostałe próby: ${attempts}`;
+        }
+      }
+
+      function closeGame() {
+        document.getElementById("gameModal").style.display = "none";
+        gameActive = false;
+      }
+    </script>
   </body>
 </html>
